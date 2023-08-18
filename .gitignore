@@ -1,0 +1,8 @@
+.git/
+.idea/
+.ipynb_checkpoints/
+__pycache__/
+images/
+data/
+nohup.out
+
