@@ -2,22 +2,22 @@
 
 This app analyse telegram chats in RUSSIAN LANGUAGE!
 
-Программа анализирует экспортированные чаты из телеграма, создавая в папке с экспортированным чатов папку с профилями каждого пользователя.
+The program analyzes the exported chats from telegram, creating a folder with the profiles of each user in the folder with the exported chats.
 
-Профили составлены с помощью нейросетей, которые анализируют сообщения.
+Profiles are compiled using neural networks that analyze messages.
 
-Получается примерно так:
+It turns out something like this:
 
 ![Alt text](example.png?raw=true "Title")
 
-**Пояснения:**
-1. Начиная с нейтральности заканчивая гневом -- это эмоциональная окраска сообщений
-2. Неуместные высказывания -- процентное содержание таких высказываний, которые, например оправдывают убийство или оскорбляют чувства верующих
-3. Негативный настрой измеряет тональность сообщений и показывает насколько человек негативно настроен в чате
-4. Токсичные сообщения -- те, из-за которых други люди могут почувствовать себя хуже
+**Explanations:**
+1. Starting with neutrality and ending with anger - this is the emotional coloring of messages
+2. Inappropriate statements - the percentage of such statements that, for example, justify murder or offend the feelings of believers
+3. Negative attitude measures the tone of messages and shows how negative a person is in the chat
+4. Toxic messages -- those that make other people feel worse
 
 
-## Запуск
+## Launch
 
 ```commandline
 conda env create -f environment.yml
@@ -26,6 +26,4 @@ python analyse_chat.py ./REL_PATH/TO_EXPORTED/CHAT_FOLDER/
 ```
 *please don't forget to add slash (/) in the end*
 
-После запуска в папке чата появится папка  neural_analys_result -- там будет результат анализа
-
-
+After launching, the neural_analys_result folder will appear in the chat folder -- the analysis result will be there
