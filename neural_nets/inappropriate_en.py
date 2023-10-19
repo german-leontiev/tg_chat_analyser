@@ -11,6 +11,6 @@ classifier = pipeline("sentiment-analysis", model="michellejieli/inappropriate_t
 # Probabilistic prediction of emotion in a text
 @torch.no_grad()
 def predict_appropriateness(text: str) -> list:
-    pred = classifier(text)
+    pred = classifier(text)[0]
     result = pred['score'] if pred["label"] != "NSFW" else 1 - pred["score"]
     return result

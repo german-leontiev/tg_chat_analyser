@@ -2,9 +2,27 @@ from neural_nets.emotions import predict_emotions
 from neural_nets.inappropriate import predict_appropriateness
 from neural_nets.sentiment import predict_sentiment
 from neural_nets.toxicity import predict_toxicity
+from neural_nets.emotions_en import predict_emotions as predict_emotions_en
+from neural_nets.inappropriate_en import predict_appropriateness as predict_appropriateness_en
+from neural_nets.sentiment_en import predict_sentiment as predict_sentiment_en 
+from neural_nets.toxicity_en import predict_toxicity as predict_toxicity_en
+#from neural_nets.language import detect_lang
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
+import string
+
+
+def detect_lang(message):
+    ru_chars = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+    en_chars = string.ascii_lowercase
+    counter = 0
+    for char in message:
+        if char.lower() in ru_chars:
+            counter -= 1
+        elif char.lower() in en_chars:
+            counter += 1
+    return "ru" if counter <= 0 else "en"
 
 
 def collect_profile(phrases):
@@ -21,14 +39,30 @@ def collect_profile(phrases):
     ]
     user_profile = {key: 0 for key in profile_stats}
     for phrase in phrases:
-        message_profile = predict_emotions(phrase)
-        message_profile["Неуместные высказываения"] = predict_appropriateness(phrase)[
-            "Inappropriate"
-        ]
-        message_profile["Негативный настрой"] = predict_sentiment(phrase)["NEGATIVE"]
-        message_profile["Токсичные сообщения"] = predict_toxicity(phrase)
-        for k, v in message_profile.items():
-            user_profile[k] += v
+        if detect_lang(phrase) == "ru":
+            message_profile = predict_emotions(phrase)
+            message_profile["Неуместные высказываения"] = predict_appropriateness(phrase)[
+                "Inappropriate"
+            ]
+            message_profile["Негативный настрой"] = predict_sentiment(phrase)["NEGATIVE"]
+            message_profile["Токсичные сообщения"] = predict_toxicity(phrase)
+            for k, v in message_profile.items():
+                user_profile[k] += v
+        else:
+            preds = predict_emotions_en(phrase)
+            message_profile = {'Нейтральность': preds['neutral'],
+            'Радость': preds['joy'],
+            'Грусть': preds['sadness'],
+            'Удивление': preds['surprise'],
+            'Страх': preds['fear'],
+            'Гнев': preds['anger']}
+
+            message_profile["Неуместные высказываения"] = predict_appropriateness_en(phrase)
+            message_profile["Негативный настрой"] = predict_sentiment_en(phrase)["NEGATIVE"]
+            message_profile["Токсичные сообщения"] = predict_toxicity_en(phrase)
+            for k, v in message_profile.items():
+                user_profile[k] += v
+
     return {k: v / len(phrases) for k, v in user_profile.items()}
 
 

@@ -1,6 +1,5 @@
 import torch
 from transformers import (
-    BertForSequenceClassification,
     AutoTokenizer,
     AutoModelForSequenceClassification,
 )

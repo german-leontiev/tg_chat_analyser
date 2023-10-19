@@ -7,11 +7,12 @@ import os
 
 
 exported_chat = sys.argv[1]
-list_of_htmls = glob(f"{exported_chat}messag*")
+list_of_htmls = glob(f"{exported_chat}/messag*")
 
 print("Extracting messages...")
 users_and_messages = {}
 for html in tqdm(list_of_htmls):
+    print(list_of_htmls)
     with open(html, "r") as f:
         html_content = f.read()
     soup = BeautifulSoup(html_content)
