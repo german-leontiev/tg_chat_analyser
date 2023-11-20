@@ -3,10 +3,13 @@ from neural_nets.inappropriate import predict_appropriateness
 from neural_nets.sentiment import predict_sentiment
 from neural_nets.toxicity import predict_toxicity
 from neural_nets.emotions_en import predict_emotions as predict_emotions_en
-from neural_nets.inappropriate_en import predict_appropriateness as predict_appropriateness_en
-from neural_nets.sentiment_en import predict_sentiment as predict_sentiment_en 
+from neural_nets.inappropriate_en import (
+    predict_appropriateness as predict_appropriateness_en,
+)
+from neural_nets.sentiment_en import predict_sentiment as predict_sentiment_en
 from neural_nets.toxicity_en import predict_toxicity as predict_toxicity_en
-#from neural_nets.language import detect_lang
+
+# from neural_nets.language import detect_lang
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
@@ -41,24 +44,32 @@ def collect_profile(phrases):
     for phrase in phrases:
         if detect_lang(phrase) == "ru":
             message_profile = predict_emotions(phrase)
-            message_profile["Неуместные высказываения"] = predict_appropriateness(phrase)[
-                "Inappropriate"
+            message_profile["Неуместные высказываения"] = predict_appropriateness(
+                phrase
+            )["Inappropriate"]
+            message_profile["Негативный настрой"] = predict_sentiment(phrase)[
+                "NEGATIVE"
             ]
-            message_profile["Негативный настрой"] = predict_sentiment(phrase)["NEGATIVE"]
             message_profile["Токсичные сообщения"] = predict_toxicity(phrase)
             for k, v in message_profile.items():
                 user_profile[k] += v
         else:
             preds = predict_emotions_en(phrase)
-            message_profile = {'Нейтральность': preds['neutral'],
-            'Радость': preds['joy'],
-            'Грусть': preds['sadness'],
-            'Удивление': preds['surprise'],
-            'Страх': preds['fear'],
-            'Гнев': preds['anger']}
+            message_profile = {
+                "Нейтральность": preds["neutral"],
+                "Радость": preds["joy"],
+                "Грусть": preds["sadness"],
+                "Удивление": preds["surprise"],
+                "Страх": preds["fear"],
+                "Гнев": preds["anger"],
+            }
 
-            message_profile["Неуместные высказываения"] = predict_appropriateness_en(phrase)
-            message_profile["Негативный настрой"] = predict_sentiment_en(phrase)["NEGATIVE"]
+            message_profile["Неуместные высказываения"] = predict_appropriateness_en(
+                phrase
+            )
+            message_profile["Негативный настрой"] = predict_sentiment_en(phrase)[
+                "NEGATIVE"
+            ]
             message_profile["Токсичные сообщения"] = predict_toxicity_en(phrase)
             for k, v in message_profile.items():
                 user_profile[k] += v
@@ -115,6 +126,3 @@ def create_profile_image(profile, save_path):
     ax.set_rlabel_position(180 / num_vars)
     plt.savefig(save_path)
     plt.close()
-
-
-
